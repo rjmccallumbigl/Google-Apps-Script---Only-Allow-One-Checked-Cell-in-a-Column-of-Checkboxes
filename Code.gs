@@ -27,7 +27,7 @@ function onEdit(e){
   var thisCol = range.getColumn();
   
   //  Run function if checked column is edited
-  if (thisRow > headerRow && thisCol === columnNumber && sheet.getName() === sheetName){
+  if (thisRow > headerRow && thisCol === columnNumber && sheet.getName() === sheetName && range.isChecked()){
     console.log("Run Function");
     oneTrueCell(sheet, thisRow, thisCol);
   } else {
@@ -59,7 +59,7 @@ function oneTrueCell(sheet, thisRow, thisCol) {
   
 //  Make the last checked box the only checked box in the column
   for (var x = 1; x < columnArray.length; x++){    
-    columnArray[x] = (x !== thisRow - 1) ? ["FALSE"] : ["TRUE"];    
+    columnArray[x] = (x !== thisRow - 1 && (x !== "TRUE" || x !== "FALSE")) ? ["FALSE"] : ["TRUE"];    
   }
   
   //  Set array of checkboxes to sheet
