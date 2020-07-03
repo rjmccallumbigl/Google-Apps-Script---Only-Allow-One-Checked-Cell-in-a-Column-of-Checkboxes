@@ -63,5 +63,6 @@ function oneTrueCell(sheet, thisRow, thisCol) {
   }
   
   //  Set array of checkboxes to sheet
-  dataRange.setValues(columnArray);  
+  dataRange.setValues(columnArray); 
+  SpreadsheetApp.flush();
 }
