@@ -1,4 +1,37 @@
 /**
+*
+* Only allow one cell in your checkbox column to be checked at a time. If a cell has been checked, unchecks other cells in the same column.
+* 
+* @param sheet {sheet} The active sheet in the spreadsheet being edited
+* @param thisRow {Integer} The current row being edited
+* @param thisCol {Integer} The current column being edited
+*
+* https://www.reddit.com/r/googlesheets/comments/hkjt3v/check_only_one_checkbox_in_google_sheet/
+*/
+
+function oneTrueCell(sheet, thisRow, thisCol) {
+
+  //  Declare variables 
+  var dataRange = sheet.getRange(1, thisCol, sheet.getLastRow(), 1);
+  var dataRangeValues = dataRange.getDisplayValues();
+
+  //  Create array for only check column members
+  var columnArray = new Array(dataRangeValues.length);
+  
+  //  Make sure header is the same
+  columnArray[0] = dataRangeValues[0];
+  
+//  Make the last checked box the only checked box in the column
+  for (var x = 1; x < columnArray.length; x++){    
+    columnArray[x] = (x !== thisRow - 1 && (x !== "TRUE" || x !== "FALSE")) ? ["FALSE"] : ["TRUE"];    
+  }
+  
+  //  Set array of checkboxes to sheet
+  dataRange.setValues(columnArray); 
+  SpreadsheetApp.flush();
+}
+
+/**
 * Script that modifies the sheet whenever it is edited
 *
 * @param e {Object} The current cell being edited
@@ -33,36 +66,4 @@ function onEdit(e){
   } else {
     console.log("Didn't run function") ;
   }
-}
-
-/**
-*
-* Only allow one cell in your checkbox column to be checked at a time. If a cell has been checked, unchecks other cells in the same column.
-* 
-* @param sheet {sheet} The active sheet in the spreadsheet being edited
-* @param thisRow {Integer} The current row being edited
-* @param thisCol {Integer} The current column being edited
-*
-*/
-
-function oneTrueCell(sheet, thisRow, thisCol) {
-
-  //  Declare variables 
-  var dataRange = sheet.getRange(1, thisCol, sheet.getLastRow(), 1);
-  var dataRangeValues = dataRange.getDisplayValues();
-
-  //  Create array for only check column members
-  var columnArray = new Array(dataRangeValues.length);
-  
-  //  Make sure header is the same
-  columnArray[0] = dataRangeValues[0];
-  
-//  Make the last checked box the only checked box in the column
-  for (var x = 1; x < columnArray.length; x++){    
-    columnArray[x] = (x !== thisRow - 1 && (x !== "TRUE" || x !== "FALSE")) ? ["FALSE"] : ["TRUE"];    
-  }
-  
-  //  Set array of checkboxes to sheet
-  dataRange.setValues(columnArray); 
-  SpreadsheetApp.flush();
 }
